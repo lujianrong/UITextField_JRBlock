@@ -43,3 +43,9 @@
 - (void)setShouldClearBlock:(BOOL (^)(UITextField *textField))shouldClearBlock;
 - (void)setShouldReturnBlock:(BOOL (^)(UITextField *textField))shouldReturnBlock;
 @end
+
+@interface UITextField (LJRAddTargetBlock)
+
+- (void)addTargetBlock:(void (^)(UITextField *textField))block forControlEvents:(UIControlEvents)events;
+
+@end

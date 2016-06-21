@@ -169,3 +169,18 @@ static const NSString *UITextFieldShouldReturnBlockKey;
     objc_setAssociatedObject(self, &UITextFieldShouldReturnBlockKey, shouldReturnBlock, OBJC_ASSOCIATION_COPY);
 }
 @end
+
+
+@implementation UITextField (LJRAddTargetBlock)
+
+static const NSString *UITextFieldAddTargetBlockKey;
+
+- (void)addTargetBlock:(void (^)(UITextField *))block forControlEvents:(UIControlEvents)events {
+    objc_setAssociatedObject(self, &UITextFieldAddTargetBlockKey, [block copy], OBJC_ASSOCIATION_COPY_NONATOMIC);
+    [self addTarget:self action:@selector(_TextFieldEditingTarget:) forControlEvents:events];
+}
+- (void)_TextFieldEditingTarget:(UITextField *)textField {
+    void (^LJRUITextFieldBlock)() = objc_getAssociatedObject(self, &UITextFieldAddTargetBlockKey);
+    if (LJRUITextFieldBlock)  LJRUITextFieldBlock(textField);
+}
+@end
